@@ -11,7 +11,7 @@ namespace MyShop.DataAccess.SQL
     public class DataContext : DbContext
     {
         public DataContext()
-            : base("DefaultConntection")
+            : base("DefaultConnection")
         {
 
         }

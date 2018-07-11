@@ -213,6 +213,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -343,6 +344,10 @@
     <ProjectReference Include="..\MyShop.DataAccess.InMemory\MyShop.DataAccess.InMemory.csproj">
       <Project>{759026F2-A79B-442B-B67D-5172265CC5F7}</Project>
       <Name>MyShop.DataAccess.InMemory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyShop.DataAccess.SQL\MyShop.DataAccess.SQL.csproj">
+      <Project>{C8FC9943-03A2-4A01-8933-5D2D4DE5F57A}</Project>
+      <Name>MyShop.DataAccess.SQL</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
