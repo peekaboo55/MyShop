@@ -8,6 +8,8 @@ using MyShop.Core.Contracts;
 using MyShop.Core.Models;
 using MyShop.Core.ViewModels;
 using MyShop.DataAccess.InMemory;
+using MyShop.DataAccess.SQL;
+using PagedList;
 
 namespace MyShop.WebUI.Controllers
 {
@@ -23,10 +25,58 @@ namespace MyShop.WebUI.Controllers
         }
 
         // GET: ProductManager
-        public ActionResult Index()
-        {
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        {            
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DescriptionSort = String.IsNullOrEmpty(sortOrder) ? "desc_desc" : "";
+            ViewBag.CategorySort = String.IsNullOrEmpty(sortOrder) ? "cate_desc" : "";
+            ViewBag.PriceSort = String.IsNullOrEmpty(sortOrder) ? "price_desc" : "";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
             List<Product> products = context.Collection().ToList();
-            return View(products);
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(s => s.Name.Contains(searchString)).ToList();
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    products = products.OrderByDescending(p => p.Name).ToList();
+                    break;
+                case "desc_desc":
+                    products = products.OrderByDescending(p => p.Description).ToList();
+                    break;
+                case "cate_desc":
+                    products = products.OrderByDescending(p => p.Category).ToList();
+                    break;
+                case "price_desc":
+                    products = products.OrderByDescending(p => p.Price).ToList();
+                    break;
+                case "date_desc":
+                    products = products.OrderByDescending(p => p.CreatedAt).ToList();
+                    break;
+                default:
+                    products = products.OrderBy(p => p.CreatedAt).ToList();
+                    break;
+
+            }
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(products.ToPagedList(pageNumber, pageSize));
         }
 
 
